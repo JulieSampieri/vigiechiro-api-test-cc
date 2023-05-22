@@ -1,0 +1,12 @@
+Authomatic~=1.0
+flask~=1.1
+Flask-PyMongo~=0.3
+Flask-Cache~=0.13
+Jinja2~=2.10
+MarkupSafe~=1.1
+itsdangerous~=1.1
+pymongo~=3.0
+requests~=2.20
+werkzeug~=0.16  # flask-cache makes use of werkzeug.contrib that have been remove in 1.0.0
+# Application server
+gunicorn~=19.9

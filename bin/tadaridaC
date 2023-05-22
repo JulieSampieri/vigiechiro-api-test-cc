@@ -1,0 +1,44 @@
+#! /bin/sh
+
+if [ -z "$RSCRIPT" ]
+then
+    RSCRIPT=Rscript
+fi
+
+if [ -z "$TADARIDAC_DIR" ]
+then
+    TADARIDAC_DIR=`dirname $0`/tadaridaC_src
+fi
+if [ -z "$TADARIDAC_LEARNER_NAME" ]
+then
+    TADARIDAC_LEARNER_NAME=ClassifEspHF3.learner
+fi
+TADARIDAC_LEARNER_PATH=$TADARIDAC_DIR/$TADARIDAC_LEARNER_NAME
+
+if ( [ "$TADARIDAC_LEARNER_URL" = "" ] )
+then
+    TADARIDAC_LEARNER_URL='https://s3-eu-west-1.amazonaws.com/vigie-chiro-site/ClassifEspHF3.learner'
+fi
+
+if ( [ "$#" -eq 0 ] )
+then
+    echo 'usage: tadaridaC <directory>'
+    exit 1
+else
+    INPUT_FILE=`readlink -f $1`
+    if ( [ "$?" -ne 0 ] )
+    then
+        echo "$1 is not a valid file"
+        exit 1
+    fi
+fi
+
+
+if ( ! [ -f $TADARIDAC_LEARNER_PATH ] )
+then
+    echo 'Retrieving tadaridaC learner'
+    wget $TADARIDAC_LEARNER_URL -O $TADARIDAC_LEARNER_PATH -nv
+fi
+
+# Finally start tadaridaC R script
+cd $TADARIDAC_DIR && $RSCRIPT ./TadaridaC.r $INPUT_FILE
